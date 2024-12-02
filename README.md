@@ -8,7 +8,7 @@ Enumere os recursos principais da API.
 
 Workflow:
 verifique em detalhes minha ideia do que será o projeto:
-- [Escopo definido](future_features.md)
+- [Escopo definido](escopo.md)
 acompanhe o registro de como eu estou desenvolvendo a aplicação: 
 - [Etapas Criativas](workflow.md)
 confira as task atualizadas no meu kanban
