@@ -110,7 +110,7 @@ TO-DO
 - Tratador de erros (códigos de rota)
 
 DONE
-- Entender com o chatGPT como mais de um tipo de permissão será administrada no sistema
+- Entender como mais de um tipo de permissão será administrada no sistema
 - Pensar entidades do sistema
 
 =====================
