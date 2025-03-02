@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MembrosController {
 	
 	@PostMapping
+	/*
+	 * Testando commits*/
 	/*@Transactional*/
 	public ResponseEntity cadastrarMembros() {
 		
