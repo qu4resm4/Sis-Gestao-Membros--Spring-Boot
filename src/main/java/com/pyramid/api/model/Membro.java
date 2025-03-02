@@ -1,6 +1,16 @@
 package com.pyramid.api.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,39 +24,69 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Membro {
-	
-	/**
-	 *     id SERIAL PRIMARY KEY,                          -- Identificador único
-    nome VARCHAR(255) NOT NULL,                       -- Nome completo do membro
-    cpf VARCHAR(11) NOT NULL UNIQUE,                 -- CPF único (formato sem máscara)
-    email VARCHAR(255) NOT NULL UNIQUE,              -- Email único
-    telefone VARCHAR(15),                            -- Telefone para contato
-    setor_id INTEGER NOT NULL DEFAULT 1,             -- Relacionamento com setores
-    funcao_id INTEGER NOT NULL DEFAULT 1,            -- Relacionamento com funções
-    perfil VARCHAR(50) NOT NULL,                    -- Perfil do membro (RH, Estratégico, Tático ou Operacional.)
-    senha VARCHAR(255) NOT NULL,                    -- Senha criptografada
-    ativo BOOLEAN NOT NULL DEFAULT TRUE,            -- Indica se o membro está ativo no sistema
-    ultimo_login TIMESTAMP,                         -- Último login do membro
-    data_nascimento DATE,                           -- Data de nascimento do membro
-    
-    logradouro VARCHAR(255) NOT NULL,            -- Nome da rua, avenida, etc.
-    numero VARCHAR(10) NOT NULL,                 -- Número da residência (ou "S/N")
-    complemento VARCHAR(255),                    -- Informação adicional (ex.: bloco, apto)
-    bairro VARCHAR(100) NOT NULL,                -- Bairro
-    cidade VARCHAR(100) NOT NULL,                -- Cidade
-    estado VARCHAR(2) NOT NULL,                  -- Estado UF (ex.: "SP", "RJ")
-    cep VARCHAR(9) NOT NULL,                     -- CEP no formato "#####-###"
-    
-    data_contratacao DATE,                          -- Data de início no cargo
-    criado_por_id INTEGER,       					-- Quem criou o registro
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data/hora da criação
-    atualizado_por VARCHAR(255),                   -- Quem fez a última atualização
-    atualizado_em TIMESTAMP,                       -- Data/hora da última atualização
-    desativado_em TIMESTAMP,                       -- Data/hora da desativação
-    desativado_por VARCHAR(255),                   -- Quem desativou o membro
-    genero CHAR(1) NOT NULL, 
-	 * 
-	 * 
-	 * /
-	
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Ajuste de tipo para `Long` para melhor compatibilidade com o banco.
+
+    @Column(nullable = false, length = 255)
+    private String nome;
+
+    @Column(nullable = false, unique = true, length = 11)
+    private String cpf; // Mantido como String, mas validado para conter exatamente 11 dígitos.
+
+    @Column(nullable = false, length = 1)
+    private Character genero; // Ajustado para Character, refletindo melhor o tipo CHAR(1) no banco.
+
+    @Column(name = "data_nascimento", columnDefinition = "DATE")
+    private LocalDate dataNascimento; // Ajustado para LocalDate para mapeamento correto de DATE.
+
+    @Embedded
+    private Endereco endereco; // Mapeamento de uma entidade embutida.
+
+    @Column(length = 15)
+    private String telefone; // Mantido como String para formatar e armazenar telefone.
+
+    @Column(name = "data_contratacao", columnDefinition = "DATE")
+    private LocalDate dataContratacao; // Ajustado para LocalDate.
+
+    @Column(nullable = false, unique = true, length = 255)
+    private String email;
+
+    @Column(nullable = false, length = 255)
+    private String senha;
+
+    @Column(name = "setor_id", nullable = false)
+    private Long setorId; // Ajuste para Long.
+
+    @Column(name = "ultimo_login", columnDefinition = "TIMESTAMP")
+    private LocalDateTime ultimoLogin; // Ajustado para LocalDateTime.
+
+    @Column(name = "funcao_id", nullable = false)
+    private Long funcaoId; // Ajuste para Long.
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private Perfil perfil; // Enum ajustado com mapeamento para String no banco.
+
+    @Column(name = "criado_por_id")
+    private Long criadoPorId; // Ajuste para Long.
+
+    @Column(name = "criado_em", columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime criadoEm; // Ajustado para LocalDateTime.
+
+    @Column(name = "atualizado_por", length = 255)
+    private String atualizadoPor;
+
+    @Column(name = "atualizado_em", columnDefinition = "TIMESTAMP")
+    private LocalDateTime atualizadoEm; // Ajustado para LocalDateTime.
+
+    @Column(nullable = false)
+    private Boolean ativo;
+
+    @Column(name = "desativado_em", columnDefinition = "TIMESTAMP")
+    private LocalDateTime desativadoEm; // Ajustado para LocalDateTime.
+
+    @Column(name = "desativado_por", length = 255)
+    private String desativadoPor;
 }
